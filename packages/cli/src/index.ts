@@ -3,7 +3,7 @@ import { homedir } from "node:os";
 import { z } from "zod";
 import { join, dirname } from "node:path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { sendTelegramMessage } from "sendkit-core";
+import { sendTelegramMessage } from "@lexand/sendkit-core";
 
 const program = new Command();
 const configPath = join(homedir(), ".config", "sendkit", "config.json");
