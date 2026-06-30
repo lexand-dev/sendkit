@@ -2,46 +2,38 @@ import { Command } from "commander";
 import { homedir } from "node:os";
 import { z } from "zod";
 import { join, dirname } from "node:path";
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  writeFileSync
-} from "node:fs";
-import { sendTelegramMessage } from "sendkit-core"
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { sendTelegramMessage } from "sendkit-core";
 
 const program = new Command();
 const configPath = join(homedir(), ".config", "sendkit", "config.json");
 const cliConfigSchema = z.object({
-  telegramBotToken: z.string().min(1).optional()
+  telegramBotToken: z.string().min(1).optional(),
 });
-
 
 function writeTelegramBotToken(token: string) {
   mkdirSync(dirname(configPath), { recursive: true });
   writeFileSync(configPath, `${JSON.stringify({ telegramBotToken: token }, null, 2)}\n`, {
     mode: 0o600,
   });
-};
+}
 
 function getTelegramBotToken() {
   if (!existsSync(configPath)) {
-    throw new Error("Telegram bot token is required. Run `sendkit init`.")
+    throw new Error("Telegram bot token is required. Run `sendkit init`.");
   }
 
   const config = cliConfigSchema.parse(JSON.parse(readFileSync(configPath, "utf-8")));
   const token = config.telegramBotToken;
 
   if (!token) {
-    throw new Error("Telegram bot token is required. Run `sendkit init`.")
+    throw new Error("Telegram bot token is required. Run `sendkit init`.");
   }
 
-  return token
-};
+  return token;
+}
 
-program
-  .name("sendkit")
-  .description("SendKit CLI")
+program.name("sendkit").description("SendKit CLI");
 program
   .command("init")
   .description("Configure SendKit CLI local settings")
@@ -49,7 +41,7 @@ program
   .action(async (options: { telegramBotToken: string }) => {
     writeTelegramBotToken(options.telegramBotToken);
     console.log(`Saved SendKit CLI config to ${configPath}`);
-  })
+  });
 
 program
   .command("telegram")
@@ -60,7 +52,7 @@ program
     const result = await sendTelegramMessage({
       botToken: getTelegramBotToken(),
       chatId,
-      message
+      message,
     });
 
     console.log(JSON.stringify(result));
@@ -69,6 +61,6 @@ program
 await program.parseAsync(process.argv).catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
-})
+});
 
 // https://api.telegram.org/bot<bot-token>/getUpdates

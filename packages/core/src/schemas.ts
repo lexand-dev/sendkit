@@ -3,7 +3,7 @@ import { z } from "zod";
 // Input Schema
 export const telegramMessageInputSchema = z.object({
   chatId: z.string().min(1, "Chat ID is required"),
-  message: z.string().min(1, "Message is required")
+  message: z.string().min(1, "Message is required"),
 });
 
 // Telegram Options
@@ -20,9 +20,11 @@ export const telegramSendMessageRequestSchema = z.object({
 // Response
 export const telegramSendMessageResponseSchema = z.object({
   ok: z.boolean(),
-  result: z.object({
-    message_id: z.number(),
-  }).optional(),
+  result: z
+    .object({
+      message_id: z.number(),
+    })
+    .optional(),
   description: z.string().optional(),
 });
 

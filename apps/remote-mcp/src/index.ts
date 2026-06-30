@@ -1,8 +1,6 @@
 import { Hono, type Context } from "hono";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import {
-  WebStandardStreamableHTTPServerTransport
-} from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
+import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createClerkClient } from "@clerk/backend";
 import { generateClerkProtectedResourceMetadata } from "@clerk/mcp-tools/server";
 
@@ -40,7 +38,7 @@ function createServer(botToken: string) {
     async (input) => {
       const result = await sendTelegramMessage({
         ...input,
-        botToken
+        botToken,
       });
 
       return {
@@ -56,7 +54,7 @@ function createServer(botToken: string) {
   );
 
   return server;
-};
+}
 
 const app = new Hono();
 
@@ -67,10 +65,10 @@ function protectedResourceMetadataUrl(c: Context, botToken: string) {
 function unauthorizedMcpResponse(c: Context, botToken: string) {
   c.header(
     "WWW-Authenticate",
-    `Bearer resource_metadata="${protectedResourceMetadataUrl(c, botToken)}"`
+    `Bearer resource_metadata="${protectedResourceMetadataUrl(c, botToken)}"`,
   );
   return c.json({ error: "Unauthorized" }, 401);
-};
+}
 
 app.get("/.well-known/oauth-protected-resource/:botToken/mcp", (c) => {
   return c.json(
