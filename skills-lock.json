@@ -1,6 +1,13 @@
 {
   "version": 1,
   "skills": {
+    "sendkit": {
+      "source": "lexand-dev/sendkit",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": "skills/sendkit/SKILL.md",
+      "computedHash": "ac0a1d0caff5e5e03668dae8ccbf4c15c26557b4f1e07f91e1540d85031746bb"
+    },
     "skill-creator": {
       "source": "anthropics/skills",
       "sourceType": "github",
